@@ -1,0 +1,9 @@
+body{
+  text-align:center;
+  background-color: #DBDCDC;
+}
+table{
+  margin:auto;
+  border-style: solid;
+  border-width: thin;
+}
