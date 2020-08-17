@@ -1,6 +1,6 @@
 var genres = [];
 var difficulty = "normal";
-for(var i = 0; i < 23; ++i){
+for(var i = 0; i < 28; ++i){
 document.querySelectorAll("button")[i].addEventListener("click",function(){
   //alert("a button was clicked with a value of: " + this.value);
   if(this.value === "username"){
