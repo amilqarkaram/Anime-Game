@@ -5,15 +5,35 @@ body{
   text-align: center;
   background-color: #DBDCDC;
   min-height: 100%;
+  font-family: "McLaren", cursive;
+  font-weight: 200;
 }
 h1{
   margin: 0 auto;
 }
+header {
+  display:block;
+  background-color: #28a745;
+  margin: auto;
+  padding: 16px 32px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  text-align:left
+}
+
+header h1 {
+  color: #fff;
+  font-family: "McLaren", cursive;
+  font-weight: 200;
+}
+
 .center{
   position:absolute; /*it can be fixed too*/
   left:0;
   right:0;
   top:9%;
+}
+.spaced{
+  margin-top:3%;
 }
 .genres{
 display:inline-block;
@@ -32,6 +52,12 @@ outline: none;
    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
         box-shadow: inset 0px 0px 5px #c1c1c1;
 }
+/* .btn-success{
+  color: black;
+}
+button:hover{
+  color:black;
+} */
 .genresTable{
   border-collapse: separate;
   border-spacing: 10px;
