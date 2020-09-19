@@ -10,6 +10,7 @@ const numAnswers = 4;//four choices
 const port = 3000;// port number
 //let data = annData.getData();
 var genres = [];
+var years = [];
 var questionNumber = 0;
 var completedQuestions = [];
 var saveQuestion = [];
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({extended:true}));//necessary to be able to retrie
 app.set('view engine', 'ejs');//necessary to use embedded javascript
 app.get("/", function(req, res){
   genres = [];
+  years= ["2010"];
   questionNumber = 0;
   completedQuestions = [];
   saveQuestion = [];
@@ -31,13 +33,13 @@ app.get("/", function(req, res){
 });
 app.post("/", function(req, res){
   let value = req.body.button;
-  if(req.body.difficulty !== undefined){
-  difficulty = req.body.difficulty;
-  console.log("difficutly: " + difficulty);
-}
 console.log(util.inspect(req.body, false, null));
-  if(value === "ajax"){
+  if(value === "ajax-play"){
     genres = req.body.genres;
+    difficulty = req.body.difficulty;
+    years = req.body.years;
+    console.log("years: " + years);
+    console.log("difficulty: " + difficulty);
   }
   else if(value === "play"){
     console.log("will redirect to game");
@@ -62,16 +64,17 @@ app.get("/game",function(req,res){ // process get requests sent from the browser
     console.log("new question");
     console.log("difficulty: " + difficulty);
     console.log("genres: " + genres);
+    console.log();
     if(genres.includes("anime",0) && genres.includes("manga",0)){
     type = "anime";
     numQuestions = 5;
     let index = genres.indexOf(type);
     genres.splice(index,1);
-    questions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions);
+    questions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions,years);
     type = "manga";
     index = genres.indexOf(type);
     genres.splice(index,1);
-    var moreQuestions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions);
+    var moreQuestions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions,years);
     questions.push(...moreQuestions);
     }
     else if(genres.includes("anime",0)){
@@ -79,14 +82,14 @@ app.get("/game",function(req,res){ // process get requests sent from the browser
       numQuestions = 10;
       let index = genres.indexOf(type);
       genres.splice(index,1);
-      questions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions);
+      questions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions,years);
     }
     else if(genres.includes("manga",0)){
       type = "manga";
       numQuestions = 10;
       let index = genres.indexOf(type);
       genres.splice(index,1);
-      questions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions);
+      questions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions,years);
     }
   }
   //console.log(util.inspect(questions, false, null));
@@ -97,6 +100,7 @@ app.get("/game",function(req,res){ // process get requests sent from the browser
     var imgSrc = root.answer1.imgSrc;
     console.log("ImageSrc: " + imgSrc);
     console.log("Plotsummary: " + plotSummary);
+    console.log("releaseDates: " + root.answer1.releaseDates)
     var vals = [];
     var randAns = [];
     let tempAns = [];
@@ -152,12 +156,14 @@ app.post("/game", function(req, res){
     ++questionNumber;
     ++score;
     //data = annData.getData();
-     res.redirect("/game");
+      // waits 1 second before redirecting, so the player can see if they were right or wrong
+      setTimeout(()=>{res.redirect("/game");},1000)
   }
   else{
     console.log("Wrong Answer!");
     ++questionNumber;
-    res.redirect("/game");
+    // waits 1 second before redirecting, so the player can see if they were right or wrong
+    setTimeout(()=>{res.redirect("/game");},1000)
   }
 });
 // needed for every application(still confused exactly what this does). I think every server needs to be connected to a specific port

@@ -1,5 +1,6 @@
 var genres = [];
 var difficulty = "normal";
+var years = [];
 for(var i = 0; i < 28; ++i){
 document.querySelectorAll("button")[i].addEventListener("click",function(){
   //alert("a button was clicked with a value of: " + this.value);
@@ -18,7 +19,7 @@ document.querySelectorAll("button")[i].addEventListener("click",function(){
       //alert("Data: " + data + "\nStatus: " + status);
     });
   }
-  else if(this.classList.contains("genres")){
+  else if(this.name === "genres"){
     if(this.classList.contains("clicked")){
       this.classList.remove("clicked");
       var index = genres.indexOf(this.value);
@@ -47,9 +48,22 @@ document.querySelectorAll("button")[i].addEventListener("click",function(){
     }
     //console.log("difficulty");
   }
+  else if(this.value === "years"){
+    yearString = this.name.substring(0,4);
+    alert("yearString: " + yearString);
+    if(this.classList.contains("clicked")){
+      this.classList.remove("clicked");
+      var index = years.indexOf(yearString);
+      years.splice(index,1);
+    }
+    else{
+      this.classList.add("clicked");
+      years.push(yearString);
+    }
+  }
   else if(this.value === "play"){
     //alert(genres);
-    $.post("/",{button: "ajax", genres: genres, difficulty: difficulty },function(data, status){
+    $.post("/",{button: "ajax-play", genres: genres, difficulty: difficulty, years: years },function(data, status){
     });
     var input = document.createElement("input");
     input.name = "button";
