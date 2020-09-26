@@ -38,7 +38,7 @@ At the beginning of every month each group is randomly assigned an anime based o
 Each show will be broken up into episodes per week for that month, and the users would discuss what they watched on a specified day of their collective choosing.
 
 ## Visuals
-![Home Page](https://github.com/amilqarkaram/Anime-Game/tree/master/Images/"Home-Page.png")
+![Home Page](https://github.com/amilqarkaram/Anime-Game/blob/master/Images/Home-Page.png)
 ## Authors and Acknowledgments
 The application is still in major development so it is not yet free to pull. Acknowledgments to the [*AnimeNewsNetwork*](https://www.animenewsnetwork.com/) API for providing all the information that was essential for the creation of this application.
 
