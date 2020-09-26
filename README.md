@@ -1,7 +1,7 @@
 # Anime-Game
 A web application that allows a user to generate a random anime based on specifications such as genre, year, type, and popularity.
 ## Description
-It is now implemented as a quiz game. The user gives their username and specifications(including difficulty), and then a 10 question quiz is generated with a final [scoreboard](#####scoreboard).
+It is now implemented as a quiz game. The user gives their username and specifications(including difficulty), and then a 10 question quiz is generated with a final scoreboard.
 
 ### Features
 There are a few features that give users the chance to input specifications before beginning the game.
@@ -39,6 +39,7 @@ Each show will be broken up into episodes per week for that month, and the users
 
 ## Visuals
 ![Home Page](https://github.com/amilqarkaram/Anime-Game/blob/master/Images/Home-Page.png)
+![Question](https://github.com/amilqarkaram/Anime-Game/tree/master/Images/Question.png)
 ## Authors and Acknowledgments
 The application is still in major development so it is not yet free to pull. Acknowledgments to the [*AnimeNewsNetwork*](https://www.animenewsnetwork.com/) API for providing all the information that was essential for the creation of this application.
 
