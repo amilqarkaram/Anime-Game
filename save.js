@@ -3,7 +3,7 @@ const xml2js = require("xml2js");//ANN servers send back xml, this npm package i
 const util = require("util");
 const mongoose = require("mongoose");
 const performance = require('perf_hooks').performance;
-mongoose.connect("mongodb://localhost:27017/animeDB", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb+srv://admin-amilqar:123hurBnomC@cluster0.rmpoy.mongodb.net/animeDB", {useNewUrlParser: true, useUnifiedTopology: true});
 //this is the path to get genres obj.ann.anime[0].info[4]._
 
 const animeDocSchema = {

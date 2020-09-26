@@ -4,7 +4,7 @@ const util = require("util");
 //for the years, "none is not being counted as an unqualified year"
 //deal with duplicates. The API had duplicates in the system some have releaseDates and some don't. Get rid of all the duplicates without release dates
 //and in general
-mongoose.connect("mongodb://localhost:27017/animeDB", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb+srv://admin-amilqar:123hurBnomC@cluster0.rmpoy.mongodb.net/animeDB", {useNewUrlParser: true, useUnifiedTopology: true});
 const animeDocSchema = {
   name: String,
   type: String,

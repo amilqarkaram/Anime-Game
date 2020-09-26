@@ -13,10 +13,10 @@ A list of genres that the user can select from.
 ##### Type
 The user can either select "Anime" or "Manga"
 ##### Difficulty
-The choice among "Normal," "Expert," and "Master" 
+The choice among "Normal," "Expert," and "Master"
 #### Username
 A username can be inputted to show up later on the scoreboard
-#### Years 
+#### Years
 The user chooses years  per decade, ranging from the 1970's to the 2010's to delineate which years of anime or manga they know the best.
 
 #### Game
@@ -29,7 +29,7 @@ The user will be shown a picture or a description of an anime or manga based on 
 A list of the names of previous players and their scores including the current player.
 
 ## Roadmap
-Using the core anime randomizing functionality, I plan to transform the project by adding social networking aspects to create an anime "book club". 
+Using the core anime randomizing functionality, I plan to transform the project by adding social networking aspects to create an anime "book club".
 
 Users would be able to log in and create and account. They would specify their preferences in anime or manga as well as the dates they are available and given a list of groups that matched their preferences. The user would then choose a group.
 
@@ -37,7 +37,8 @@ At the beginning of every month each group is randomly assigned an anime based o
 
 Each show will be broken up into episodes per week for that month, and the users would discuss what they watched on a specified day of their collective choosing.
 
-
+## Visuals
+![Home Page](https://github.com/amilqarkaram/Anime-Game/tree/master/Images/"Home-Page.png")
 ## Authors and Acknowledgments
 The application is still in major development so it is not yet free to pull. Acknowledgments to the [*AnimeNewsNetwork*](https://www.animenewsnetwork.com/) API for providing all the information that was essential for the creation of this application.
 
