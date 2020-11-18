@@ -4,7 +4,8 @@ const util = require("util");
 //for the years, "none is not being counted as an unqualified year"
 //deal with duplicates. The API had duplicates in the system some have releaseDates and some don't. Get rid of all the duplicates without release dates
 //and in general
-mongoose.connect("mongodb+srv://admin-amilqar:123hurBnomC@cluster0.rmpoy.mongodb.net/animeDB", {useNewUrlParser: true, useUnifiedTopology: true});
+//problem: i use the earliest date root to match with one from the database. However, if sombody picked 2010 and 1990
+mongoose.connect("mongodb://localhost:27017/animeDB", {useNewUrlParser: true, useUnifiedTopology: true});
 const animeDocSchema = {
   name: String,
   type: String,
@@ -17,14 +18,15 @@ const animeDocSchema = {
   genres: [String],
   releaseDates:[String]
 };
+// Creted two models from the defined schema
 const Anime = mongoose.model('anime',animeDocSchema,'animes');
 const Manga = mongoose.model('manga',animeDocSchema,'mangas');
+// this function will remove any years not specified
 function removeUnqualifiedYears(years,data){
 return new Promise((resolve, reject) => {
   console.log("data: " + data.length);
   let removeElement = [];
 for(var l = 0; l < data.length;++l){
-    //console.log("releaseDates: " + data[l].releaseDates + "/n");
 if(data[l].releaseDates[0] === "none"){
   console.log(data[l].name);
   removeElement.push(l);
@@ -38,7 +40,7 @@ if(data[l].releaseDates[0] === undefined){
 let earliestDateRoot = data[l].releaseDates[0].substring(0,3);
 for(var j = 1; j < data[l].releaseDates.length; ++j){
   releaseYearRoot = data[l].releaseDates[j].substring(0,3);
-  //console.log("release root for the object" + l + "is " + releaseYearRoot);
+
   let previousReleaseYearRoot = data[l].releaseDates[j - 1].substring(0,3);
   if(Number(releaseYearRoot) < Number(previousReleaseYearRoot)){
     earliestDateRoot = releaseYearRoot;
@@ -47,9 +49,9 @@ for(var j = 1; j < data[l].releaseDates.length; ++j){
 // if that root is equal to one of the roots specified then that anime or manga is a match
 // otherwise, add to an array called removeElemts
 for(var m = 0; m < years.length; ++m){
-  //console.log("earliest Date root for the " + l + "th object is " + earliestDateRoot);
+
 if(earliestDateRoot === years[m].substring(0,3)){
-  //console.log("found a match");
+
   break;
 }
 else{
@@ -68,6 +70,8 @@ console.log("removeElement array " + removeElement);
 });
 
 }
+// the algorithm for difficulty is based on number of votes. This is under the
+// assumption that the most votes the more known and thus the easier
 
 function find(difficulty, dataVar, genres,i,type,years){
   var min = undefined;
@@ -84,6 +88,7 @@ function find(difficulty, dataVar, genres,i,type,years){
   return new Promise(function(resolve, reject){
     if(type === "anime"){
       // if(genres[i] === "erotica") need to filter out erotica
+      // filters through all anime based on genres and number of votes
     Anime.find({genres: genres[i],nbVotes:{$gte:min}}, function(err, data){
       //var filteredData = [];
       if(err){console.log("There was an error: " + err);}
@@ -125,6 +130,8 @@ if(type === "anime"){
           let answers = {};
           let questions = [];
           let ans = [];
+          // create 10 random questions with 4 random answerName
+          //where questions is an array containing 4 answers contained in an object
           for(let i  = 0; i < numQ; ++i){
               for(let j = 0; j < numAns; ++j){
                 randNum = Math.floor(Math.random() * filteredData.length);

@@ -8,7 +8,7 @@ const retrieve = require(__dirname + "/retrieve.js");
 const app = express();
 const numAnswers = 4;//four choices
 const port = 3000;// port number
-//let data = annData.getData();
+
 var genres = [];
 var years = [];
 var questionNumber = 0;
@@ -19,8 +19,9 @@ var username = "";
 var difficulty = "normal";
 app.use(express.static("public"));// allows inclusion of static files(css stylesheet). these files are not sent from our servers because the do not change.
 app.use(bodyParser.urlencoded({extended:true}));//necessary to be able to retrieve user input from a form/post request.
-app.set('view engine', 'ejs');//necessary to use embedded javascript
+app.set('view engine', 'ejs');//necessary to use embedded javascript(ejs)
 app.get("/", function(req, res){
+  // initializing values
   genres = [];
   years= ["2010"];
   questionNumber = 0;
@@ -34,7 +35,7 @@ app.get("/", function(req, res){
 app.post("/", function(req, res){
   let value = req.body.button;
 console.log(util.inspect(req.body, false, null));
-  if(value === "ajax-play"){
+  if(value === "ajax-info"){
     genres = req.body.genres;
     difficulty = req.body.difficulty;
     years = req.body.years;
@@ -57,14 +58,18 @@ app.get("/game",function(req,res){ // process get requests sent from the browser
   let numQuestions = 10;
   let type = "anime";
   let numTypes = 0;
-
+  console.log("-----------------------------------------------------------------")
   console.log("Question Number: " + questionNumber);
+  // I created an async function so that I can use the keyword await inside of interval
+  // some functions that execute asynchronously can pose a problem because often
+  // lines after it require the result of the previous line
   async function main(){
+    // right after "play" is clicked, all questions and answers are created
     if(questionNumber === 1){
     console.log("new question");
     console.log("difficulty: " + difficulty);
     console.log("genres: " + genres);
-    console.log();
+    // if the user chose both anime and manga, 5 questions will be generated from both genres
     if(genres.includes("anime",0) && genres.includes("manga",0)){
     type = "anime";
     numQuestions = 5;
@@ -76,7 +81,8 @@ app.get("/game",function(req,res){ // process get requests sent from the browser
     genres.splice(index,1);
     var moreQuestions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions,years);
     questions.push(...moreQuestions);
-    }
+  }
+  // if only anime was chosen then 10 anime questions will be created
     else if(genres.includes("anime",0)){
       type = "anime";
       numQuestions = 10;
@@ -84,6 +90,7 @@ app.get("/game",function(req,res){ // process get requests sent from the browser
       genres.splice(index,1);
       questions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions,years);
     }
+    //if only manga was chosen, then 10 manga questions will be generated
     else if(genres.includes("manga",0)){
       type = "manga";
       numQuestions = 10;
@@ -92,15 +99,18 @@ app.get("/game",function(req,res){ // process get requests sent from the browser
       questions =  await retrieve.createAnswers(difficulty,numAnswers, type, genres, numQuestions,years);
     }
   }
-  //console.log(util.inspect(questions, false, null));
+  // after generation, we have questions which holds 10 question objects in an array
     let root = questions[questionNumber-1];
+    // keeps track of the completed questions
     completedQuestions.push(questionNumber);
-    //console.log(root);
+  // root now has access to the current question object
     var plotSummary = root.answer1.plotSummary;
     var imgSrc = root.answer1.imgSrc;
     console.log("ImageSrc: " + imgSrc);
     console.log("Plotsummary: " + plotSummary);
     console.log("releaseDates: " + root.answer1.releaseDates)
+    // because the first answer is always the correct answer
+    // I randomized the answer choics
     var vals = [];
     var randAns = [];
     let tempAns = [];
@@ -122,24 +132,30 @@ app.get("/game",function(req,res){ // process get requests sent from the browser
       tempAns.splice(rand,1);
       --temp;
     }
-    //console.log(plotSummary);
+    // the vals array stores weather an answers is correct or incorrect in order
     saveQuestion = [plotSummary,randAns[0],randAns[1],randAns[2],randAns[3],vals[0],vals[1], vals[2], vals[3]];
+    // I pass in a random answer for each answer, and the array of correct and incorrect using vals to be use my ejs file
     res.render("game",{imageSrc: imgSrc, src:plotSummary, answer1: randAns[0], answer2: randAns[1], answer3: randAns[2], answer4: randAns[3], val1: vals[0],val2:vals[1], val3:vals[2] ,val4: vals[3]});
   }
   console.log("completed question: " + completedQuestions.includes(questionNumber,0) );
+  // if the current question is not yet completed and we are not past the las question, then run main()
   if(!completedQuestions.includes(questionNumber,0) && questionNumber <= numQuestions){
   main();
   console.log("main has run");
 }
-else if(questionNumber <= numQuestions){
-  res.render("game",{imageSrc: imgSrc, src:saveQuestion[0], answer1: saveQuestion[1], answer2: saveQuestion[2], answer3: saveQuestion[3], answer4: saveQuestion[4], val1: saveQuestion[5],val2:saveQuestion[6], val3:saveQuestion[7] ,val4: saveQuestion[8]});
-}
+//if the current questions is completed
+// else if(questionNumber <= numQuestions){
+//   res.render("game",{imageSrc: imgSrc, src:saveQuestion[0], answer1: saveQuestion[1], answer2: saveQuestion[2], answer3: saveQuestion[3], answer4: saveQuestion[4], val1: saveQuestion[5],val2:saveQuestion[6], val3:saveQuestion[7] ,val4: saveQuestion[8]});
+// }
+// Otherwise the quiz is over
 else{
 console.log("END OF QUIZ__________________________");
 async function manipInfo(){
+  // saving score of the new user
   let doc = await saveScore.addInfo(username,score);
   let arr = await saveScore.getInfo();
   console.log(arr);
+  // render scoreboard
   res.render("score",{scoreboard: arr, username:username, score: score, numQuestions: numQuestions});
 };
 manipInfo();
@@ -166,7 +182,7 @@ app.post("/game", function(req, res){
     setTimeout(()=>{res.redirect("/game");},1000)
   }
 });
-// needed for every application(still confused exactly what this does). I think every server needs to be connected to a specific port
+// needed for every application
 app.listen(port,function(){
   console.log("listening on port 3000");
 })

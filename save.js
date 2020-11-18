@@ -4,7 +4,7 @@ const util = require("util");
 const mongoose = require("mongoose");
 const performance = require('perf_hooks').performance;
 mongoose.connect("mongodb+srv://admin-amilqar:123hurBnomC@cluster0.rmpoy.mongodb.net/animeDB", {useNewUrlParser: true, useUnifiedTopology: true});
-//this is the path to get genres obj.ann.anime[0].info[4]._
+//the pupose of this file is to interact with the API automatically, and save all of the anime information into my local database
 
 const animeDocSchema = {
   name: String,
@@ -24,6 +24,7 @@ const Manga = mongoose.model("manga",animeDocSchema);
 let arrAnime = [];
 let arrManga = [];
 var i  = 0;
+// this findPlace function, finds the last id that was saved from API
 function findPlace(){
 return new Promise(function(resolve,reject){
 Anime.find(function(err,res){
@@ -38,13 +39,11 @@ if(arrManga[arrManga.length-1].id > arrAnime[arrAnime.length-1].id){
   i  = arrManga[arrManga.length-1].id;
   console.log("i should be " + i);
   resolve(i);
-  //console.log("i is: " + i);
 }
 else{
   i  = arrAnime[arrAnime.length-1].id;
   console.log("i should be " + i);
   resolve(i);
-  //console.log("i is: " + i);
 }
 }
 else{
@@ -62,9 +61,11 @@ async function calibration(){
 
 
 async function main(){
+  // hardcoded value for the last ID that the ANN has
   if(i === 23520){
     clearInterval(myTimer);
   }
+  // getDetails function saves every thing into the database
 let answers = await getDetails();
 }
 function change() {
@@ -74,6 +75,7 @@ function change() {
             setTimeout(resolve, 1000);
         });
     }
+// waits 1 second between each call so as not to overload their servers
 calibration().then(async function(){
 //   while(i < 23520){
 //   var t0  = performance.now();
@@ -121,6 +123,7 @@ function getDetails(){
       resolve(result);
     }
     else{
+      // first check if the data is for an anime or a manga
       let manga = false;
       let anime = false;
       if(result.ann.anime === undefined){
@@ -131,6 +134,7 @@ function getDetails(){
         var root  =  result.ann.anime[0];
         anime = true;
     }
+    // save releaseDates, genres, plot summary,imageSrc, and ratings
       var releaseDates = [];
       var genres = [];
       var plotSummary = "";
@@ -172,6 +176,7 @@ function getDetails(){
         bayesianScore = root.ratings[0].$.bayesian_score;
 
       }
+      // if there is no information the give default value of "none"
       if(root.$ == undefined){
         name = "none";
         id = "none";
@@ -180,6 +185,7 @@ function getDetails(){
         name = root.$.name;
         id = root.$.id;
       }
+      // if it was an anime, save all data into an anime document
       if(anime){
       let anime = new Anime({
           name: name,
@@ -196,6 +202,7 @@ function getDetails(){
       console.log("anime ID: " + id);
       resolve(anime.save());
     }
+    // if it's a manga save all information in manga document
     else if(manga){
       let manga= new Manga({
         name: name,

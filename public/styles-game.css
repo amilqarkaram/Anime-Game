@@ -1,6 +1,6 @@
 body{
   text-align: center;
-  background-color: #DBDCDC;
+  background-color:#28a745;
   margin: 0 auto 0 auto;
 }
 
@@ -31,6 +31,7 @@ height: 25%;
   border-spacing: 10px;
 }
 .game{
+  background-color:#DBDCDC;
   border-style: double;
   border-radius: 25px;
   border-width: 5px;
